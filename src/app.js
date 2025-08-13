@@ -1,29 +1,23 @@
-const qrcode = require('qrcode-terminal');
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client } = require('whatsapp-web.js');
+const qrcode = require("qrcode-terminal");
 
-// Criar cliente usando autenticação local (salva sessão)
-const client = new Client({
-    authStrategy: new LocalAuth()
-});
+const client = new Client();
 
-// Mostrar QR Code no terminal
-client.on('qr', qr => {
-    console.log('Escaneie o QR Code abaixo para conectar:');
+console.log("Iniciando...")
+
+client.on('qr', (qr) => {
+    // Generate and scan this code with your phone
+    console.log('QR RECEIVED', qr);
     qrcode.generate(qr, { small: true });
 });
 
-// Quando estiver conectado
 client.on('ready', () => {
-    console.log('✅ Bot conectado com sucesso!');
+    console.log('Client is ready!');
 });
 
-// Quando receber mensagem
 client.on('message', msg => {
-    console.log(`📩 Mensagem de ${msg.from}: ${msg.body}`);
-
-    // Resposta automática simples
-    if (msg.body.toLowerCase() === 'oi') {
-        msg.reply('Olá! 🤖 Como posso ajudar?');
+    if (msg.body == '!ping') {
+        msg.reply('pong');
     }
 });
 
